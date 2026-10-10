@@ -1,0 +1,42 @@
+{{ define "main" }}
+<h1>{{ .Title }}</h1>
+<div class="gallery-grid">
+    {{ range .Pages }}
+    <a href="{{ .RelPermalink }}" class="album-card">
+        <div class="album-cover">
+            {{ $image := "" }}
+            {{ if .IsPage }}
+                {{ with .Resources.ByType "image" }}{{ $image = index . 0 }}{{ end }}
+            {{ else }}
+                {{ with .Pages }}
+                    {{ $firstPage := index . 0 }}
+                    {{ with $firstPage.Resources.ByType "image" }}{{ $image = index . 0 }}{{ end }}
+                {{ end }}
+            {{ end }}
+
+            {{ if $image }}
+                <!-- Calidad extrema 98 y recorte perfecto para la portada del álbum -->
+                {{ $thumb := $image.Fill "600x400 q98 Lanczos" }}
+                <img src="{{ $thumb.RelPermalink }}" alt="{{ .Title }}">
+            {{ else }}
+                <div class="placeholder"></div>
+            {{ end }}
+        </div>
+        <div class="album-info">
+            {{ $titulo := .Title }}
+                {{ if not $titulo }}
+                    {{ $titulo = path.Base (strings.TrimSuffix "/" .RelPermalink) | humanize | title }}
+                {{ end }}
+                <h2>{{ $titulo }}</h2>
+            <p>
+                {{ if .IsPage }}
+                    {{ len (.Resources.ByType "image") }} fotos
+                {{ else }}
+                    {{ len .Pages }} sub-álbumes
+                {{ end }}
+            </p>
+        </div>
+    </a>
+    {{ end }}
+</div>
+{{ end }}

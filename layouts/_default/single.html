@@ -1,0 +1,23 @@
+{{ define "main" }}
+<!-- Si no detecta el título, usa el nombre de la carpeta por defecto -->
+{{ $titulo := .Title }}
+{{ if not $titulo }}
+    {{ $titulo = path.Base (strings.TrimSuffix "/" .RelPermalink) | humanize | title }}
+{{ end }}
+<h1>{{ $titulo }}</h1>
+
+<div class="photo-grid">
+    {{ range .Resources.ByType "image" }}
+    
+    <!-- Visor a Resolución 2K y Calidad 100 (Nitidez absoluta en web) -->
+    {{ $visor := .Resize "2560x q100 Lanczos" }}
+    
+    <!-- Miniatura de la cuadrícula -->
+    {{ $thumb := .Resize "800x q100 Lanczos" }}
+    
+    <a href="{{ $visor.RelPermalink }}" class="glightbox" data-gallery="gallery">
+        <img src="{{ $thumb.RelPermalink }}" alt="Fotografía" loading="lazy" ondragstart="return false;">
+    </a>
+    {{ end }}
+</div>
+{{ end }}
