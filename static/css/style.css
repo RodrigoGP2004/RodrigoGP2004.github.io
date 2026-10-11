@@ -91,3 +91,17 @@ h1 { margin-bottom: 2rem; font-size: 2rem; }
     .gallery-grid { grid-template-columns: 1fr; } 
     .photo-grid { column-count: 1; }
 }
+
+/* Botón de Volver */
+.back-btn {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: var(--gris);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: color 0.2s;
+}
+.back-btn:hover {
+    color: var(--texto);
+}

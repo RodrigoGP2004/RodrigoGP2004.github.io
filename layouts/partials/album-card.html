@@ -1,0 +1,28 @@
+{{/* Portada: primera foto de la carpeta o, si no hay, la de la primera subcarpeta por peso */}}
+{{ $image := "" }}
+{{ with .Resources.ByType "image" }}
+  {{ $image = index . 0 }}
+{{ else }}
+  {{ range .Sections.ByWeight }}
+    {{ if not $image }}
+      {{ with .Resources.ByType "image" }}{{ $image = index . 0 }}{{ end }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+<a href="{{ .RelPermalink }}" class="album-card">
+  <div class="album-cover">
+    {{ with $image }}
+      {{ $thumb := .Resize "800x q98 Lanczos" }}
+      <img src="{{ $thumb.RelPermalink }}" alt="{{ $.Title }}" width="{{ $thumb.Width }}" height="{{ $thumb.Height }}">
+    {{ else }}
+      <div class="placeholder"></div>
+    {{ end }}
+  </div>
+  <div class="album-info">
+    <h2>{{ .Title }}</h2>
+    <p>
+      {{ if .Sections }}{{ len .Sections }} sub-álbumes{{ else }}{{ len (.Resources.ByType "image") }} fotos{{ end }}
+    </p>
+  </div>
+</a>
